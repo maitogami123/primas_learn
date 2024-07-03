@@ -27,7 +27,7 @@ export class UserService {
   async findOne(id: number) {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: { parents: true },
+      relations: { parents: true, images: true },
     });
     console.log(user);
     if (!user) {

@@ -4,9 +4,14 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ParentModule } from './parent/parent.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MulterModule } from '@nestjs/platform-express';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: 'src/files',
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -19,6 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     UserModule,
     ParentModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

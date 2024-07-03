@@ -1,3 +1,4 @@
+import { Image } from 'src/image/entities/image.entity';
 import { Parent } from 'src/parent/entities/parent.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -20,4 +21,7 @@ export class User {
 
   @OneToMany(() => Parent, (parent) => parent.user)
   parents: Parent[];
+
+  @OneToMany(() => Image, (image) => image.user)
+  images: Image[];
 }
