@@ -1,0 +1,59 @@
+<form class="flex flex-col gap-2">
+  <div class="">
+    <label for="fullName" class="font-semibold text-md">Full name:</label>
+    <input
+      type="text"
+      class="w-full border outline-gray-400 rounded-md p-2"
+      name="fullName"
+      id="fullName"
+      [formControl]="fullNameControl"
+    />
+  </div>
+  <div class="">
+    <label for="socialId">SocialID:</label>
+    <input
+      type="text"
+      class="w-full border outline-gray-400 rounded-md p-2"
+      name="socialId"
+      id="socialId"
+      [formControl]="socialIdControl"
+    />
+  </div>
+  <div class="">
+    <label for="fixedAddress">Fixed Address:</label>
+    <input
+      type="text"
+      class="w-full border outline-gray-400 rounded-md p-2"
+      name="fixedAddress"
+      id="fixedAddress"
+      [formControl]="fixedAddressControl"
+    />
+  </div>
+  <div class="">
+    <label for="address">Address</label>
+    <input
+      type="text"
+      class="w-full border outline-gray-400 rounded-md p-2"
+      name="address"
+      id="address"
+      [formControl]="addressControl"
+    />
+  </div>
+  <div class="flex gap-4">
+    <button
+      class="px-4 py-2 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+      type="button"
+      (click)="handleCloseForm()"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="px-4 py-2 bg-green-400 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+      type="button"
+      (click)="onSubmitHandler()"
+    >
+      Save
+    </button>
+  </div>
+</form>

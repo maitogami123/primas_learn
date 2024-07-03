@@ -1,0 +1,38 @@
+<ng-container *ngIf="error; else elseTemplate">
+  <span class="text-lg text-red-600 font-bold"
+    >Can not fetch users list at the moment, please try again later!</span
+  >
+  <br />
+  Details: {{ error.message }}
+</ng-container>
+<ng-template #elseTemplate>
+  <h1 class="font-bold text-lg mb-4">User list</h1>
+  <div class="grid grid-cols-4 gap-4 mx-auto">
+    <div class="col-span-1 p-4 bg-white shadow-lg rounded-lg">
+      <ng-container *ngIf="isAddingUser; else elseTemplate">
+        <app-create-user-form
+          (closeFormEvent)="toggleAddUser()"
+          (newUserAddedEvent)="handleAddUser($event)"
+        ></app-create-user-form>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <button
+          type="button"
+          class="w-full h-full font-semibold text-3xl hover:animate-pulse"
+          (click)="toggleAddUser()"
+        >
+          Create New User +
+        </button>
+      </ng-template>
+    </div>
+    <div
+      class="col-span-1 p-4 bg-white shadow-lg rounded-lg"
+      *ngFor="let user of users"
+    >
+      <app-user-card
+        [user]="user"
+        (deletedUserEvent)="handleRemoveUser(user.id)"
+      ></app-user-card>
+    </div>
+  </div>
+</ng-template>
