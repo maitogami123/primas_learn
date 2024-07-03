@@ -6,6 +6,10 @@ import { User } from '../user-card/user-card.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { Parent } from '../parent-card/parent.model';
+import { UserDetail } from './model/user-details.model';
+import { ImageService } from 'src/services/image.service';
+import { HTMLInputEvent } from 'src/common/interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-details',
@@ -15,22 +19,25 @@ export class UserDetailsComponent {
   @Output() deletedUserEvent = new EventEmitter<number>();
   @Output() updatedUserEvent = new EventEmitter<User>();
 
-  user$: Observable<User>;
+  user$: Observable<UserDetail>;
   userId: number;
-  user: User;
+  user: UserDetail;
 
+  // Move to form group
   fullNameControl = new FormControl<string>('');
   socialIdControl = new FormControl<string>('');
   fixedAddressControl = new FormControl<string>('');
   addressControl = new FormControl<string>('');
+  imagesControl = new FormControl<File[]>([]);
 
   isEditing: boolean = false;
   isCreatingParent: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService,
-    private router: Router
+    private router: Router,
+    private imageService: ImageService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -99,12 +106,56 @@ export class UserDetailsComponent {
   }
 
   handleDeleteUser(id: number) {
-    console.log(id);
-    this.userService.deleteUser(id).subscribe({
-      next: (value) => {
-        this.deletedUserEvent.next(id);
-        this.router.navigate(['']);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.deleteUser(id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Your file has been deleted.',
+              icon: 'success',
+            }).then(() => {
+              this.deletedUserEvent.next(id);
+              this.router.navigate(['']);
+            });
+          },
+        });
+      }
+    });
+  }
+
+  handleDeleteImage(id: string) {
+    this.imageService.deleteImage(+id).subscribe({
+      next: () => {
+        this.user.images = this.user.images.filter((image) => image.id === id);
       },
     });
+  }
+
+  fileToUpload: File | null = null;
+
+  handleFileInput(event: Event) {
+    const fileEvent = event as HTMLInputEvent;
+    if (fileEvent.target.files) this.fileToUpload = fileEvent.target.files[0];
+    console.log(fileEvent);
+  }
+
+  uploadFileToActivity(userId: number) {
+    this.imageService.postFile(this.fileToUpload!, userId).subscribe(
+      (data) => {
+        // do something, if upload success
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

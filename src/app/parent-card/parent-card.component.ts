@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Parent } from './parent.model';
 import { ParentService } from 'src/services';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-parent-card',
@@ -58,10 +59,28 @@ export class ParentCardComponent {
   }
 
   deleteParentHandler(id: number) {
-    this.parentService.deleteParent(id).subscribe({
-      next: () => {
-        this.parentDeletedEvent.next(id);
-      },
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.parentService.deleteParent(id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Your file has been deleted.',
+              icon: 'success',
+            }).then(() => {
+              this.parentDeletedEvent.next(id);
+            });
+          },
+        });
+      }
     });
   }
 }

@@ -24,7 +24,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
-              "oidc-client"
+              "oidc-client",
+              "sweetalert2"
             ],
             "assets": [
               "src/assets"

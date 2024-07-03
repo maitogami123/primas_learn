@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { UserService } from 'src/services/user.service';
 import { User } from '../user-card/user-card.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-user-form',
@@ -32,7 +33,11 @@ export class CreateUserFormComponent {
       })
       .subscribe({
         next: (value) => {
-          console.log('Created user:', value);
+          Swal.fire({
+            title: 'Success!',
+            text: 'User created!',
+            icon: 'success',
+          });
           this.newUserAddedEvent.next(value);
         },
         error: (error) => {

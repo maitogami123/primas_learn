@@ -6,5 +6,4 @@ export interface User {
   socialId: string;
   fixedAddress: string;
   address: string;
-  parents: Parent[];
 }

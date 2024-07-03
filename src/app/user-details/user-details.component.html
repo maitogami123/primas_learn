@@ -1,7 +1,7 @@
 <h1 class="font-bold text-lg mb-4">User details</h1>
 <div class="grid grid-cols-2 gap-4">
-  <div class="col-span-1 bg-white shadow-lg p-4 rounded-md h-fit">
-    <div class="flex flex-col gap-4 h-full">
+  <div class="col-span-1">
+    <div class="flex flex-col gap-4 bg-white shadow-lg p-4 rounded-md h-fit">
       <form class="flex flex-col gap-2">
         <div class="">
           <label for="fullName" class="font-semibold text-md">Full name:</label>
@@ -92,6 +92,45 @@
             </button>
           </a>
         </ng-template>
+      </div>
+    </div>
+    <div class="mt-4 bg-white shadow-lg p-4 rounded-md h-fit">
+      <div class="flex flex-wrap gap-4">
+        <h1 class="font-semibold text-md">Images:</h1>
+        <div class="w-full rounded-lg flex">
+          <input
+            type="file"
+            name="images"
+            id="images"
+            accept="image/*"
+            (change)="handleFileInput($event)"
+          />
+          <button
+            type="button"
+            class="p-1 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+            (click)="uploadFileToActivity(userId)"
+          >
+            submit
+          </button>
+        </div>
+        <div
+          class="w-1/4 rounded-lg relative"
+          *ngFor="let image of user.images"
+        >
+          <button
+            type="button"
+            class="absolute top-0 right-0 size-8 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+            (click)="handleDeleteImage(image.id)"
+          >
+            x
+          </button>
+          <img
+            src="http://localhost:3000/image/{{ image.id }}"
+            class="border"
+            alt=""
+            srcset=""
+          />
+        </div>
       </div>
     </div>
   </div>
