@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateUser } from 'src/app/create-user-form/create-user.model';
 import { User } from 'src/app/user-card/user-card.model';
+import { UpdateUser } from 'src/app/user-details/update-user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -12,12 +13,19 @@ export class UserService {
     return this.http.get<User[]>('http://localhost:3000/user');
   }
 
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(`http://localhost:3000/user/${id}`);
+  }
+
   createUser(newUser: CreateUser): Observable<User> {
     return this.http.post<User>('http://localhost:3000/user', {
-      fullName: newUser.fullName,
-      socialId: newUser.socialId,
-      fixedAddress: newUser.fixedAddress,
-      address: newUser.address,
+      ...newUser,
+    });
+  }
+
+  patchUser(id: number, updateUser: UpdateUser): Observable<User> {
+    return this.http.patch<User>(`http://localhost:3000/user/${id}`, {
+      ...updateUser,
     });
   }
 

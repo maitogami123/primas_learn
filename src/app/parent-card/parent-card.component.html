@@ -1,0 +1,100 @@
+<div class="p-4 border rounded-md divide-y-2 divide-dashed">
+  <form class="flex gap-4 flex-col">
+    <div class="flex gap-4">
+      <label
+        for="{{ parent.id }}_fullName"
+        class="font-semibold text-md text-nowrap w-fit"
+        >Full name:</label
+      >
+      <input
+        type="text"
+        class="w-full border-2 read-only:border-gray-300 outline-none rounded-md p-2 border-blue-400 transition-all"
+        name="{{ parent.id }}_fullName"
+        id="{{ parent.id }}_fullName"
+        [formControl]="fullNameControl"
+        [readOnly]="!isEditing"
+      />
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-1 flex gap-4">
+        <label for="{{ parent.id }}_age" class="font-semibold text-md"
+          >Age:</label
+        >
+        <input
+          type="text"
+          class="w-full border-2 read-only:border-gray-300 outline-none rounded-md p-2 border-blue-400 transition-all"
+          name="{{ parent.id }}_age"
+          id="{{ parent.id }}_age"
+          [formControl]="ageControl"
+          [readOnly]="!isEditing"
+        />
+      </div>
+      <div class="col-span-1 flex gap-4">
+        <label for="{{ parent.id }}_role" class="font-semibold text-md"
+          >Role:</label
+        >
+        <ng-container *ngIf="!isEditing; else selectOptionsTemplate">
+          <select
+            name="{{ parent.id }}_role"
+            id="{{ parent.id }}_role"
+            [formControl]="roleControl"
+            class="w-full border-2 read-only:border-gray-300 outline-none rounded-md p-2 border-blue-400 transition-all"
+            (select)="(parent.role)"
+          >
+            <option disabled="disabled" value="Un">Unknow</option>
+            <option disabled="disabled" value="Fa">Father</option>
+            <option disabled="disabled" value="Mo">Mother</option>
+          </select>
+        </ng-container>
+        <ng-template #selectOptionsTemplate>
+          <select
+            name="{{ parent.id }}_role"
+            id="{{ parent.id }}_role"
+            [formControl]="roleControl"
+            class="w-full border-2 read-only:border-gray-300 outline-none rounded-md p-2 border-blue-400 transition-all"
+            (select)="(parent.role)"
+          >
+            <option value="Un">Unknow</option>
+            <option value="Fa">Father</option>
+            <option value="Mo">Mother</option>
+          </select>
+        </ng-template>
+      </div>
+    </div>
+  </form>
+  <div class="mt-4 pt-4 flex gap-4 justify-end">
+    <ng-container *ngIf="isEditing; else elseTemplate">
+      <button
+        class="px-4 py-2 disabled:bg-gray-400 bg-green-400 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+        type="button"
+        (click)="updateParentHandler(parent.id)"
+        [disabled]="isLoading"
+      >
+        Save
+      </button>
+      <button
+        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+        type="button"
+        (click)="cancelEditHandler()"
+      >
+        Cancel
+      </button>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <button
+        class="px-4 py-2 bg-yellow-200 rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+        type="button"
+        (click)="toggleEditting()"
+      >
+        Edit
+      </button>
+      <button
+        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+        type="button"
+        (click)="deleteParentHandler(parent.id)"
+      >
+        Delete
+      </button>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="p-4 border rounded-md divide-y-2 divide-dashed">
+  <form class="flex gap-4 flex-col">
+    <div class="flex gap-4">
+      <label for="fullName" class="font-semibold text-md text-nowrap w-fit"
+        >Full name:</label
+      >
+      <input
+        type="text"
+        class="w-full border-2 read-only:border-gray-300 outline-none rounded-md p-2 border-blue-400 transition-all"
+        name="fullName"
+        id="fullName"
+        [formControl]="fullNameControl"
+      />
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-1 flex gap-4">
+        <label for="age" class="font-semibold text-md">Age:</label>
+        <input
+          type="number"
+          class="w-full border-2 read-only:border-gray-300 outline-none rounded-md p-2 border-blue-400 transition-all"
+          name="age"
+          id="age"
+          [formControl]="ageControl"
+        />
+      </div>
+      <div class="col-span-1 flex gap-4">
+        <label for="role" class="font-semibold text-md">Role:</label>
+        <select
+          name="role"
+          id="role"
+          [formControl]="roleControl"
+          class="w-full border-2 read-only:border-gray-300 outline-none rounded-md p-2 border-blue-400 transition-all"
+        >
+          <option [defaultSelected]="true" value="Un">Unknow</option>
+          <option value="Fa">Father</option>
+          <option value="Mo">Mother</option>
+        </select>
+      </div>
+    </div>
+  </form>
+  <div class="mt-4 pt-4 flex gap-4 justify-end">
+    <button
+      class="px-4 py-2 bg-green-400 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+      type="button"
+      (click)="createHandle()"
+    >
+      Save
+    </button>
+    <button
+      class="px-4 py-2 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+      type="button"
+      (click)="cancelCreateHandler()"
+    >
+      Cancel
+    </button>
+  </div>
+</div>

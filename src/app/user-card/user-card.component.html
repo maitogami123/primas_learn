@@ -20,36 +20,13 @@
     <span>{{ user.address }}</span>
   </div>
   <div class="flex gap-4 flex-wrap justify-self-end">
-    <ng-container *ngIf="isEditing; else elseTemplate">
+    <a href="/user/{{ user.id }}">
       <button
-        class="px-4 py-2 bg-green-400 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
+        class="px-4 py-2 bg-blue-400 rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
         type="button"
       >
-        Save
+        Details
       </button>
-      <button
-        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
-        type="button"
-        (click)="toggleEditHandler()"
-      >
-        Cancel
-      </button>
-    </ng-container>
-    <ng-template #elseTemplate>
-      <button
-        class="px-4 py-2 bg-yellow-200 rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
-        type="button"
-        (click)="toggleEditHandler()"
-      >
-        Edit
-      </button>
-      <button
-        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:-translate-y-1 hover:shadow-md active:shadow-none active:translate-y-0 transition-all"
-        type="button"
-        (click)="handleDeleteUser(user.id)"
-      >
-        Delete
-      </button>
-    </ng-template>
+    </a>
   </div>
 </div>

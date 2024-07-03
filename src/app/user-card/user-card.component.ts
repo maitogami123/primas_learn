@@ -9,13 +9,8 @@ import { UserService } from 'src/services/user.service';
 export class UserCardComponent {
   @Input() user!: User;
   @Output() deletedUserEvent = new EventEmitter<number>();
-  isEditing: boolean = false;
 
   constructor(private userService: UserService) {}
-
-  toggleEditHandler() {
-    this.isEditing = !this.isEditing;
-  }
 
   handleDeleteUser(id: number) {
     console.log(id);
@@ -25,5 +20,9 @@ export class UserCardComponent {
         this.deletedUserEvent.next(id);
       },
     });
+  }
+
+  handleUpdateUser(updatedUser: User) {
+    this.user = updatedUser;
   }
 }
