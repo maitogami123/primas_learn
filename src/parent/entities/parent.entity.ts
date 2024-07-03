@@ -16,6 +16,6 @@ export class Parent {
   @Column({ enum: Role, default: Role.Un })
   role: Role;
 
-  @ManyToOne((type) => User, (user) => user.parents)
+  @ManyToOne((type) => User, (user) => user.parents, { lazy: true })
   user: User;
 }

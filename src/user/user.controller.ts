@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -27,6 +28,9 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (Number.isNaN(+id)) {
+      throw new BadRequestException('Invalid userID');
+    }
     return this.userService.findOne(+id);
   }
 

@@ -20,11 +20,6 @@ export class ParentController {
     return this.parentService.create(createParentDto);
   }
 
-  @Get()
-  findAll() {
-    return this.parentService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.parentService.findOne(+id);
