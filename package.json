@@ -1,0 +1,16 @@
+{
+  "name": "botconnector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc --build",
+    "watch": "node --watch ./src -e ts --exec \"npm run start\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "restify": "^11.1.0"
+  }
+}

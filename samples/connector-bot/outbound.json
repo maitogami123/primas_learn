@@ -1,0 +1,24 @@
+{
+  "type": "message",
+  "serviceUrl": "http://localhost:55451",
+  "channelId": "emulator",
+  "from": {
+    "id": "5ae6c9a0-4325-11ef-b33b-db7516c698d6",
+    "name": "Bot",
+    "role": "bot"
+  },
+  "conversation": {
+    "id": "5af23b50-4325-11ef-a14a-cd1243134b23|livechat"
+  },
+  "recipient": {
+    "id": "c2211d72-bf62-4bf6-8453-81cd0d219089",
+    "role": "user"
+  },
+  "locale": "",
+  "text": "Hello, Welcome back!",
+  "inputHint": "acceptingInput",
+  "replyToId": "5b32edd0-4325-11ef-a14a-cd1243134b23",
+  "id": "5b4c6940-4325-11ef-a14a-cd1243134b23",
+  "localTimestamp": "2024-07-16T10:41:59+07:00",
+  "timestamp": "2024-07-16T03:41:59.636Z"
+}
