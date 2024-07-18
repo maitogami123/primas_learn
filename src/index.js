@@ -1,4 +1,6 @@
 const restify = require("restify");
+require("dotenv").config();
+
 const server = restify.createServer();
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
@@ -11,19 +13,13 @@ server.post("/webhook", async (req, res) => {
   let body = req.body;
   res.send(200, { message: "EVENT_RECEIVED" });
   const data = body.entry[0];
-
-  console.log(
-    `messenger-${data.messaging[0].sender.id}-${data.messaging[0].recipient.id}`
-  );
-  console.log(`\u{1F7EA} Received webhook:`);
-  console.dir(body, { depth: null });
   if (body.object === "page") {
     // Returns a '200 OK' response to all requests
-    console.log(body);
     await fetch("http://localhost:3978/api/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "accessToken",
       },
       body: JSON.stringify({
         text: data.messaging[0].message.text,
@@ -72,34 +68,45 @@ server.get("/webhook", async (req, res) => {
   }
 });
 
+// Cái này là cái API
 server.post("/proactive/:conversationId", async (req, res) => {
   res.send(200);
   const conversationId = req.params.conversationId;
   const senderId = conversationId.split("-")[1];
-  await fetch(
-    `https://graph.facebook.com/v20.0/${PAGE_ID}/messages?access_token=${PAGE_ACCESS_TOKEN}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  await fetch("http://localhost:3978/api/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: "launch campaign",
+      textFormat: "plain",
+      type: "message",
+      channelId: "messenger",
+      from: {
+        id: senderId,
+        name: "User",
+        role: "user",
       },
-      body: JSON.stringify({
-        recipient: {
-          id: senderId,
-        },
-        messaging_type: "RESPONSE",
-        message: {
-          text: "Proactive messages",
-        },
-      }),
-    }
-  );
+      conversation: {
+        id: conversationId,
+      },
+      id: conversationId,
+      recipient: {
+        id: conversationId.split("-")[2],
+        name: "Bot",
+        role: "bot",
+      },
+      serviceUrl: "http://localhost:3000",
+    }),
+  });
 });
 
 server.post(
   "/v3/conversations/:conversationId/activities/:conversationId",
   async (req, res) => {
     res.send(200);
+    console.log(req.body);
     const conversationId = req.params.conversationId;
     const senderId = conversationId.split("-")[1];
     await fetch(

@@ -4,13 +4,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc --build",
-    "watch": "node --watch ./src -e ts --exec \"npm run start\""
+    "start": "node ./src/index.js",
+    "watch": "node --watch ./src/index.js",
+    "host": "ssh -R 80:localhost:3000 serveo.net"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "restify": "^11.1.0"
   }
 }
