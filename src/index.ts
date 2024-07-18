@@ -16,11 +16,11 @@ import { EmptyBot } from "./bots/bot";
 import { UserInfoDialog } from "./dialogs/userInfoDialog";
 import { MainDialog } from "./dialogs/mainDialog";
 import { QueryDialog } from "./dialogs/queryDialog";
-import { DialogState } from "botbuilder-dialogs";
-import { UserInfos } from "./dialogs/userInfos";
+import { ProactiveDialog } from "./dialogs/proactiveDialog";
 
 const USERINFO_DIALOG = "userInfoDialog";
 const QUERY_DIALOG = "queryDialog";
+const PROACTIVE_DIALOG = "proactiveDialog";
 
 // Create HTTP server.
 const server = restify.createServer();
@@ -71,8 +71,9 @@ userState = new UserState(memoryStorage);
 
 const userInfoDialog = new UserInfoDialog(USERINFO_DIALOG);
 const queryDialog = new QueryDialog(QUERY_DIALOG);
+const proactiveDialog = new ProactiveDialog(PROACTIVE_DIALOG);
 
-const dialog = new MainDialog(userInfoDialog, queryDialog, userState);
+const dialog = new MainDialog(userInfoDialog, queryDialog, proactiveDialog);
 
 // Create the main dialog.
 const myBot = new EmptyBot(conversationState, userState, dialog);

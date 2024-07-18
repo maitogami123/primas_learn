@@ -1,41 +1,35 @@
 import {
+  DialogTurnResult,
   TextPrompt,
-  ConfirmPrompt,
   WaterfallDialog,
   WaterfallStepContext,
-  DialogTurnResult,
-  NumberPrompt,
 } from "botbuilder-dialogs";
 import { CancelAndHelpDialog } from "./cancelAndHelpingDialog";
-import { InputHints, MessageFactory } from "botbuilder";
+import { MessageFactory, InputHints } from "botbuilder";
 import { UserInfos } from "./userInfos";
 
 const TEXT_PROMPT = "textPrompt";
-const CONFIRM_PROMPT = "confirmPrompt";
 const WATERFALL_DIALOG = "waterfallDialog";
+const CONFIRM_PROMPT = "confirmPrompt";
 
-export class QueryDialog extends CancelAndHelpDialog {
+export class QueryImagesDialog extends CancelAndHelpDialog {
   constructor(id: string) {
-    super(id || "queryDialog");
+    super(id || "queryImagesDialog");
 
-    this.addDialog(new TextPrompt(TEXT_PROMPT))
-      .addDialog(new ConfirmPrompt(CONFIRM_PROMPT))
-      .addDialog(
-        new WaterfallDialog(WATERFALL_DIALOG, [
-          this.enterQueryStep.bind(this),
-          this.beginQueryStep.bind(this),
-          this.confirmStep.bind(this),
-          this.finalStep.bind(this),
-        ])
-      );
-
-    this.initialDialogId = WATERFALL_DIALOG;
+    this.addDialog(new TextPrompt(TEXT_PROMPT)).addDialog(
+      new WaterfallDialog(WATERFALL_DIALOG, [
+        this.enterQueryStep.bind(this),
+        this.beginQueryStep.bind(this),
+        this.confirmStep.bind(this),
+        this.finalStep.bind(this),
+      ])
+    );
   }
 
   private async enterQueryStep(
     stepCtx: WaterfallStepContext
   ): Promise<DialogTurnResult> {
-    const messageText = "Enter the person's name to check their info. ";
+    const messageText = "Enter the person's name to check their images. ";
     const msg = MessageFactory.text(
       messageText,
       messageText,

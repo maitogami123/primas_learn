@@ -1,3 +1,4 @@
+import { InputHints, MessageFactory, StatePropertyAccessor } from "botbuilder";
 import {
   ConfirmPrompt,
   DialogTurnResult,
@@ -5,15 +6,9 @@ import {
   WaterfallDialog,
   WaterfallStepContext,
 } from "botbuilder-dialogs";
-import { CancelAndHelpDialog } from "./cancelAndHelpingDialog";
-import {
-  InputHints,
-  MessageFactory,
-  StatePropertyAccessor,
-  TurnContext,
-} from "botbuilder";
-import { UserInfos } from "./userInfos";
 import { Validator } from "../helpers";
+import { CancelAndHelpDialog } from "./cancelAndHelpingDialog";
+import { UserInfos } from "./userInfos";
 
 const TEXT_PROMPT = "textPrompt";
 const NUMBER_PROMPT = "numberPrompt";
@@ -46,7 +41,6 @@ export class UserInfoDialog extends CancelAndHelpDialog {
   private async fullnameStep(
     stepCtx: WaterfallStepContext
   ): Promise<DialogTurnResult> {
-    // Lúc call dialog userInfo e pass cái accessor qua
     this.userInfoAccessor = stepCtx.options as StatePropertyAccessor<UserInfos>;
     const userInfos = await this.userInfoAccessor.get(
       stepCtx.context,
@@ -73,15 +67,6 @@ export class UserInfoDialog extends CancelAndHelpDialog {
       stepCtx.context,
       new UserInfos()
     );
-    // Cứ mỗi step e phải đều get từ accessor ra như này thì nó có "nông dân" quá k a :)))
-
-    // nó nông dân mà.
-
-    // Nãy h e tìm hiểu cái kiểu mình start convo mới nhưng cùng user ID á. Thì nó hiện ra cái welcome back thôi.
-    // Mình check là check cái reciepent ID rồi so nó vào trong đâu để biết là nó đã chat với mình rồi a ?
-    // Hiện tại là nó vẫn tạo conversation mới
-
-    // Rồi cứ mỗi cái input nhập vào thì e lưu vào trong cái userInfos lấy từ cái accessor trên context hiện tại.
     userInfos.fullName = stepCtx.result;
     if (!userInfos.address) {
       const messageText = "Can you tell us your social Id number?";
@@ -144,7 +129,27 @@ export class UserInfoDialog extends CancelAndHelpDialog {
   private async finalStep(
     stepCtx: WaterfallStepContext
   ): Promise<DialogTurnResult> {
-    // Như ở đây e k return result bên dialog nữa
+    if (stepCtx.result === true) {
+      const userInfo = await this.userInfoAccessor.get(stepCtx.context);
+
+      const data = JSON.stringify({
+        fullName: userInfo.fullName,
+        socialId: userInfo.socialId,
+        fixedAddress: userInfo.address,
+        address: userInfo.address,
+      });
+      await fetch("http://localhost:3001/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: data,
+      });
+
+      const successMessage = "User created successfully!";
+      await stepCtx.context.sendActivity(successMessage);
+      return await stepCtx.endDialog();
+    }
     return await stepCtx.endDialog();
   }
 }
