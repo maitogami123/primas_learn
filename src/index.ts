@@ -3,6 +3,7 @@ import * as restify from "restify";
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
 import {
+  BotFrameworkAdapter,
   CloudAdapter,
   ConfigurationServiceClientCredentialFactory,
   ConversationState,
@@ -17,6 +18,7 @@ import { UserInfoDialog } from "./dialogs/userInfoDialog";
 import { MainDialog } from "./dialogs/mainDialog";
 import { QueryDialog } from "./dialogs/queryDialog";
 import { ProactiveDialog } from "./dialogs/proactiveDialog";
+import { CustomAdapter } from "./core/customAdapter";
 
 const USERINFO_DIALOG = "userInfoDialog";
 const QUERY_DIALOG = "queryDialog";
@@ -39,7 +41,7 @@ const botFrameworkAuthentication =
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
-const adapter = new CloudAdapter(botFrameworkAuthentication);
+const adapter = new BotFrameworkAdapter();
 
 // Catch-all for errors.
 adapter.onTurnError = async (context, error) => {
