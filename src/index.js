@@ -15,11 +15,11 @@ server.post("/webhook", async (req, res) => {
   const data = body.entry[0];
   if (body.object === "page") {
     // Returns a '200 OK' response to all requests
-    await fetch("http://localhost:3978/api/messages", {
+    const postResponse = await fetch("http://localhost:3978/api/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "accessToken",
+        Authorization: "Bearer accessToken",
       },
       body: JSON.stringify({
         text: data.messaging[0].message.text,
@@ -43,6 +43,9 @@ server.post("/webhook", async (req, res) => {
         serviceUrl: "http://localhost:3000",
       }),
     });
+    if (postResponse.status === 401) {
+      await postMessage(data.messaging[0].sender.id, await postResponse.json());
+    }
   } else {
     // Return a '404 Not Found' if event is not from a page subscription
     res.send(404);
@@ -106,29 +109,32 @@ server.post(
   "/v3/conversations/:conversationId/activities/:conversationId",
   async (req, res) => {
     res.send(200);
-    console.log(req.body);
     const conversationId = req.params.conversationId;
     const senderId = conversationId.split("-")[1];
-    await fetch(
-      `https://graph.facebook.com/v20.0/${PAGE_ID}/messages?access_token=${PAGE_ACCESS_TOKEN}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          recipient: {
-            id: senderId,
-          },
-          messaging_type: "RESPONSE",
-          message: {
-            text: req.body.text,
-          },
-        }),
-      }
-    );
+    await postMessage(senderId, req.body.text);
   }
 );
+
+async function postMessage(senderId, message) {
+  await fetch(
+    `https://graph.facebook.com/v20.0/${PAGE_ID}/messages?access_token=${PAGE_ACCESS_TOKEN}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        recipient: {
+          id: senderId,
+        },
+        messaging_type: "RESPONSE",
+        message: {
+          text: message,
+        },
+      }),
+    }
+  );
+}
 
 server.listen(3000, function () {
   console.log("%s listening at %s", server.name, server.url);
